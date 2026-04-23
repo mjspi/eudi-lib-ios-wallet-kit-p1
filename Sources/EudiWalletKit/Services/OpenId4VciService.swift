@@ -500,6 +500,7 @@ public actor OpenId4VCIService {
 	private func handleAuthorizationCode(issuer: Issuer, offer: CredentialOffer, request: AuthorizationRequested, authorizationCode: String) async throws -> AuthorizedRequest {
 		let typedAuthorizationCode = try AuthorizationCode(value: authorizationCode)
 		let authorized = try await issuer.authorizeWithAuthorizationCode(
+                        serverState: request.state,
 			request: request,
 			authorizationCode: typedAuthorizationCode,
 			authorizationDetailsInTokenRequest: .doNotInclude,
@@ -636,6 +637,7 @@ public actor OpenId4VCIService {
 			configurationIds: [model.configuration.configurationIdentifier]
 		)
 		let authorized = try await issuer.authorizeWithAuthorizationCode(
+                        serverState: request.state,
 			request: request,
 			authorizationCode: try AuthorizationCode(value: authorizationCode),
 			grant: try offer.grants ?? .authorizationCode(try Grants.AuthorizationCode(authorizationServer: nil))
